@@ -1,0 +1,65 @@
+{
+  "name": "markdown-preview-mention",
+  "displayName": "Markdown Preview Mention",
+  "description": "Insert a Claude Code @-mention for the lines selected in a Markdown preview.",
+  "publisher": "soungrong",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onUri"
+  ],
+  "contributes": {
+    "markdown.previewScripts": [
+      "./preview.js"
+    ],
+    "markdown.previewStyles": [
+      "./preview.css"
+    ],
+    "commands": [
+      {
+        "command": "markdownPreviewMention.insertFromPreview",
+        "title": "Markdown Preview Mention: Insert @-Mention for the Preview Selection"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "markdownPreviewMention.insertFromPreview",
+        "key": "ctrl+l",
+        "mac": "cmd+l",
+        "when": "(activeWebviewPanelId == 'markdown.preview' || activeCustomEditorId == 'vscode.markdown.preview.editor') && !sideBarFocus && !auxiliaryBarFocus && !panelFocus"
+      }
+    ],
+    "configuration": {
+      "title": "Markdown Preview Mention",
+      "properties": {
+        "markdownPreviewMention.delivery": {
+          "type": "string",
+          "enum": [
+            "paste",
+            "pasteWithFallback",
+            "claude"
+          ],
+          "default": "paste",
+          "enumDescriptions": [
+            "Paste the reference into the focused Claude chat input. No editor tab ever opens, but only one chat receives it, and a chat that is still starting may miss it.",
+            "Paste when exactly one Claude chat tab is visible. Otherwise use Claude Code's own delivery, which opens a new chat or mentions in every visible chat; the first time, it opens the source file beside the preview and leaves it open.",
+            "Always use Claude Code's own delivery: the same result as Cmd+L in a text editor, including the highlighted chip. The first press opens the source file beside the preview and leaves it open; later presses reuse it."
+          ],
+          "markdownDescription": "How the reference reaches the Claude Code chat. Claude Code only accepts a mention from a text editor's selection, so `paste` never opens an editor, while `claude` opens the source file beside the preview (once, then reuses it) to use Claude's own delivery. A chat in the side bar is not visible to the tab check, so `pasteWithFallback` treats it as no chat."
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "markdown-it": "14.1.0",
+    "playwright": "1.62.1"
+  },
+  "scripts": {
+    "test": "node --test *.test.js",
+    "test:preview": "node test/preview-harness.cjs fixture.md"
+  }
+}
