@@ -36,21 +36,62 @@ const third = 3;
 
 ## Expected references
 
-Open this file in a Markdown preview, make each selection, press Cmd+L, and compare the reference inserted into the chat. Every reference ends `fixture.md#<lines>`. `npm run test:preview` makes the same selections automatically.
+Each step selects some text in the Markdown preview, presses Cmd+L, and checks the reference that arrives in the Claude chat. `npm run test:preview` makes the same selections automatically.
 
-1. Select "three source lines" on the paragraph's first line: `#3`.
-2. Drag from "second line" to "third line": `#4-5`.
-3. Select "bold text": `#4`.
-4. Triple-click "three source lines" in the paragraph: `#3-5`.
-5. Select "Nested item one": `#9`.
-6. Drag from "Second item" to "Nested item two": `#8-10`.
-7. Select "second = 2" in the code block: `#14`.
-8. Drag from "first = 1" to "third = 3" in the code block: `#13-15`.
-9. Select "b1" in the table: `#20`.
-10. Drag from "a1" to "b2" in the table: `#20-21`.
-11. Drag from "Markdown Preview Mention fixture" to "three source" in the paragraph: `#1-3`.
-12. Drag from "origins (harmless, remove)." to "Ondřej" in the backlog excerpt: `#30-31`.
-13. Select "The next daily run", just after the wrapped code span: `#27`.
-14. Select "reinstalled", inside the wrapped code span after its line break: `#27`.
-15. Select "E: The package", inside the wrapped code span before its line break: `#26`.
-16. Drag from "un-wedged apt" to "subset unattended": `#26-27`.
+### Setting up
+
+- Open this file in a text editor with line numbers showing. You only read line numbers there; you do not select anything in it.
+- Run **Markdown: Open Preview to the Side** (Cmd+K V). Make every selection in this preview.
+- Open a Claude Code chat. With the default `paste` delivery, the reference goes into the chat that is already open.
+
+### Reading a step
+
+- **The words in quotes are text in this file, not a description of it.** For example, "three source lines" is the phrase at the end of line 3, and "second line" is the phrase in the middle of line 4. The paragraph under the title describes its own lines, which is why its words sound like instructions.
+- **Select "X"** means highlight exactly the phrase X.
+- **Drag from "X" to "Y"** means press the mouse just before the first letter of X, drag, and release just after the last letter of Y. The selection covers both phrases and everything between them.
+- **Triple-click "X"** means triple-click any word of X, which selects the whole paragraph.
+- After each selection, press Cmd+L while the preview still has focus. The reference in the chat should end in `fixture.md#` followed by the number at the end of the step. `#4-5` means lines 4 to 5 of this file.
+
+### What a line number counts
+
+A line number is a line of this file as numbered in the text editor's gutter, which is the text between two presses of Return. The editor may wrap a long line across several rows on screen. Those rows share one gutter number, so they count as one line.
+
+The preview, on the other hand, joins all the lines of a paragraph or a list item into one block and re-wraps it to the window width. The preview therefore never shows where a line ends. Each step names the line its phrases sit on, so you can find them in the text editor beside the preview.
+
+### The paragraph (lines 3 to 5)
+
+In the preview, lines 3, 4 and 5 read as one run of text: "This paragraph has three source lines. The second line carries **bold text** and the third line ends it."
+
+1. Select "three source lines" (the end of line 3): `#3`.
+2. Drag from "second line" to "third line" (the middle of line 4 to the middle of line 5): `#4-5`.
+3. Select "bold text" (the end of line 4): `#4`.
+4. Triple-click "three source lines" (line 3), which selects the whole paragraph: `#3-5`.
+
+### The list (lines 7 to 10)
+
+5. Select "Nested item one" (line 9): `#9`.
+6. Drag from "Second item" to "Nested item two" (line 8 to line 10): `#8-10`.
+
+### The code block (lines 12 to 16)
+
+7. Select "second = 2" (line 14): `#14`.
+8. Drag from "first = 1" to "third = 3" (line 13 to line 15): `#13-15`.
+
+### The table (lines 18 to 21)
+
+9. Select "b1" (line 20): `#20`.
+10. Drag from "a1" to "b2" (line 20 to line 21): `#20-21`.
+
+### Across two blocks
+
+11. Drag from "Markdown Preview Mention fixture" to "three source" (the title on line 1 to the paragraph on line 3): `#1-3`.
+
+### The wrapped code span (lines 25 to 35)
+
+Lines 25 to 35 are two list items copied from a real backlog. These lines are long, so the text editor may wrap each one across several rows; go by the gutter numbers. The code span `E: The package runcloud-agent needs to be reinstalled` starts at the end of line 26 and continues at the start of line 27, although the preview shows it unbroken.
+
+12. Drag from "origins (harmless, remove)." to "Ondřej" (the end of line 30, the first item's last line, to the start of line 31, the second item's first line): `#30-31`.
+13. Select "The next daily run" (line 27, just after the code span ends): `#27`.
+14. Select "reinstalled" (the start of line 27, the code span's last word): `#27`.
+15. Select "E: The package" (the end of line 26, the code span's first words): `#26`.
+16. Drag from "un-wedged apt" to "subset unattended" (line 26 to line 27): `#26-27`.
