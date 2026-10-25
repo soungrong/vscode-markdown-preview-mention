@@ -1,13 +1,34 @@
 {
   "name": "markdown-preview-mention",
   "displayName": "Markdown Preview Mention",
-  "description": "Insert a Claude Code @-mention for the lines selected in a Markdown preview.",
+  "description": "Mention the lines you select in a Markdown preview in the Claude Code chat. Unofficial; not affiliated with Anthropic.",
+  "version": "0.1.0",
   "publisher": "soungrong",
-  "version": "0.0.1",
-  "private": true,
-  "engines": {
-    "vscode": "^1.90.0"
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soungrong/vscode-markdown-preview-mention"
   },
+  "bugs": {
+    "url": "https://github.com/soungrong/vscode-markdown-preview-mention/issues"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "preview",
+    "mention",
+    "claude code",
+    "line reference"
+  ],
+  "engines": {
+    "vscode": "^1.143.0"
+  },
+  "extensionDependencies": [
+    "anthropic.claude-code"
+  ],
   "main": "./extension.js",
   "activationEvents": [
     "onUri"
