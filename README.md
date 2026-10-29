@@ -17,7 +17,7 @@ In a text editor, Claude Code's **Insert @-Mention Reference** command puts a re
 Select text in a Markdown preview, then do either of these:
 
 - Press **Cmd+L** (Ctrl+L on Windows and Linux). The shortcut is active only while a Markdown preview has focus, so Cmd+L in a text editor keeps running Claude Code's own command.
-- Click the **@ mention** button that appears beside the selection.
+- Click the **@ mention** button that appears beside the selection. VS Code asks "Allow 'Markdown Preview Mention' extension to open this URI?" on every click until you tick "Do not ask me again for this extension" and choose **Open**.
 
 The reference covers every source line the selection touches, including exact lines inside paragraphs, lists, tables and fenced code blocks. It works in both kinds of Markdown preview: the preview tab opened with **Markdown: Open Preview**, and VS Code's newer "Markdown Preview" editor.
 
@@ -66,7 +66,17 @@ This extension works around two missing features. The intended end state is a Cl
 npm install                     # dev dependencies: markdown-it and playwright
 npm test                        # unit tests
 npm run test:preview            # drives preview.js in headless Chromium over fixture.md's expected references
+npm run test:vscode             # drives real VS Code and Claude Code through every flow in docs/use-cases.md
 node test/line-mapping-check.cjs <markdown directory>... [--math "<VS Code>/Contents/Resources/app/extensions/markdown-math"]
 ```
 
-`test/line-mapping-check.cjs` checks, for every line of every multi-line block in the given Markdown files, that the line maps back to itself. It exits non-zero unless the mapping is exact and both of its deliberately wrong controls fail. `fixture.md` is also the manual check: open it in a preview and follow its "Expected references" list. `docs/use-cases.md` records the use cases and user flows the extension was built for.
+`test/line-mapping-check.cjs` checks, for every line of every multi-line block in the given Markdown files, that the line maps back to itself. It exits non-zero unless the mapping is exact and both of its deliberately wrong controls fail. `fixture.md` can also be checked by hand: open it in a preview and follow its "Expected references" list. `docs/use-cases.md` records the use cases and user flows the extension was built for.
+
+`npm run test:vscode` (`test/vscode-harness.cjs`) checks every flow in `docs/use-cases.md` in real VS Code. It launches VS Code from `/Applications` with a throwaway profile, this extension and the newest installed Claude Code, then uses the real mouse, keyboard and Claude chat. It covers the `fixture.md` steps in both kinds of preview, the @ mention button, every delivery mode in each chat layout, the non-behaviours and the failure messages.
+
+- **It needs Claude Code installed and signed in.** It types references into Claude chat inputs but never sends a message.
+- **Its VS Code window is invisible, lets clicks through, and gives keyboard focus back to your app.** The window can flash for a moment at launch, before the test makes it transparent, and holds keyboard focus for that moment too. After that, the test stops VS Code from bringing itself to the front (which it otherwise does when it opens a `vscode://` link). If the window ever does take focus during a check, the test hands it back after that check and the summary names the check, because anything you type in the meantime goes to the test window.
+- **It uses the system clipboard for a few minutes.** Anything you copy during the run may be overwritten; your clipboard text from before the run is put back at the end. Run one at a time, because two runs would share the same clipboard.
+- **A failed check is retried once, so flakiness shows up in the result.** `FAIL` means a check failed twice; `FLAKY` means it passed only on the retry, and the summary lists every flaky check by name.
+- **The exit code says which happened:** `0` every check passed first time, `1` a check failed, `2` the test could not run (for example Claude Code is missing or signed out), and `3` every check passed but some only on retry.
+- **Pass a word to run only the checks whose name contains it**, for example `npm run test:vscode -- clipboard`. The summary then says `ONLY n of m checks ran`.

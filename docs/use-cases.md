@@ -27,14 +27,16 @@ Expected: the Claude chat input gets the reference Claude itself would insert fo
 
 The reference covers every source line the selection touches. It is exact inside paragraphs, list items, tables and fenced code blocks, and across inline code spans that wrap across lines.
 
-Check: `npm run test:preview` passes all rows of `fixture.md`'s "Expected references" list; by hand, our Cmd+L in the preview and Claude's own Cmd+L in the text editor insert identical text for the same selection.
+Check: `npm run test:preview` passes all rows of `fixture.md`'s "Expected references" list in headless Chromium. `npm run test:vscode` makes the same selections with the mouse in real VS Code, in both kinds of preview, and reads each reference from the Claude chat; its `claude` delivery checks show that Claude's own delivery inserts the same text as our paste.
 
 ### 2. Mention selected lines with the mouse
 
 1. Select text in a preview.
 2. Click the floating **@ mention** button that appears beside the selection.
 
-Expected: the same reference as flow 1. The first click on a new install may show VS Code's "Allow … to open this URI?" dialog; after allowing it once, clicks go straight through.
+Expected: the same reference as flow 1. Each click first shows VS Code's "Allow 'Markdown Preview Mention' extension to open this URI?" dialog. Choosing **Open** with "Do not ask me again for this extension" ticked delivers the reference, and later clicks go straight through; choosing **Open** without ticking it means the next click asks again.
+
+Check: `npm run test:vscode`.
 
 ### 3. Choose how the reference reaches the chat
 
@@ -53,9 +55,11 @@ Expected behaviour in the situations users raised:
 | Several chats visible | only the focused one gets it | every visible chat gets it | every visible chat gets it |
 | Chat in the side bar | pasted, with the status-bar hint | always falls back to Claude's delivery | delivered by Claude |
 
+Check: `npm run test:vscode` runs every cell of this table.
+
 ### 4. Nothing else changes
 
-These are deliberate non-behaviours, each checked by hand before a release:
+These are deliberate non-behaviours, each checked by `npm run test:vscode`:
 
 - After a press, the text that was on the clipboard before is back on the clipboard. Only plain text is restored: a copied image or file list is lost.
 - A plain Cmd+C in the preview still copies the selected text.
@@ -68,6 +72,8 @@ These are deliberate non-behaviours, each checked by hand before a release:
 - Cmd+L with nothing selected shows "select some text in the preview first".
 - If the preview script is not loaded (for example before a window reload), Cmd+L shows a warning after one second instead of doing nothing.
 - A path Claude Code refuses to mention (for example one containing `#`) shows a warning and inserts nothing.
+
+Check: `npm run test:vscode`.
 
 ## Out of scope
 

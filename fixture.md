@@ -36,7 +36,7 @@ const third = 3;
 
 ## Expected references
 
-Each step selects some text in the Markdown preview, presses Cmd+L, and checks the reference that arrives in the Claude chat. `npm run test:preview` makes the same selections automatically.
+Each step selects some text in the Markdown preview, presses Cmd+L, and checks the reference that arrives in the Claude chat. `npm run test:preview` makes the same selections automatically in headless Chromium, and `npm run test:vscode` makes them with the mouse in real VS Code.
 
 ### Setting up
 
