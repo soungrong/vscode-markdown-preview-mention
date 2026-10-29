@@ -117,12 +117,11 @@ async function deliverThroughClaude(document, startLine, endLine) {
   const mentionSelection = new vscode.Selection(startLine, 0, endLine, document.lineAt(endLine).text.length);
   const visibleEditor = vscode.window.visibleTextEditors.find((editor) => editor.document.uri.toString() === document.uri.toString());
   if (visibleEditor) {
-    const { selections, visibleRanges } = visibleEditor;
+    const { selections } = visibleEditor;
     visibleEditor.selection = mentionSelection;
     await vscode.window.showTextDocument(document, { viewColumn: visibleEditor.viewColumn });
     await vscode.commands.executeCommand('claude-vscode.insertAtMention');
     visibleEditor.selections = selections;
-    visibleEditor.revealRange(visibleRanges[0], vscode.TextEditorRevealType.AtTop);
     return;
   }
   await vscode.window.showTextDocument(document, { viewColumn: sourceColumnFor(document.uri), selection: mentionSelection, preview: false });

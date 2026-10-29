@@ -95,3 +95,11 @@ Lines 25 to 35 are two list items copied from a real backlog. These lines are lo
 14. Select "reinstalled" (the start of line 27, the code span's last word): `#27`.
 15. Select "E: The package" (the end of line 26, the code span's first words): `#26`.
 16. Drag from "un-wedged apt" to "subset unattended" (line 26 to line 27): `#26-27`.
+
+### Scroll position in `claude` delivery mode
+
+This check needs `"markdownPreviewMention.delivery": "claude"`, `editor.stickyScroll.enabled` on (the default), and the text editor for this file visible beside the preview.
+
+- Scroll the preview with the trackpad until a long paragraph, such as the one at line 91, is partly above the top of the preview. The text editor follows.
+- Select a few words in that paragraph and press Cmd+L. Neither the preview nor the text editor should move.
+- Select a few words again and click the "@ mention" button. Again, neither the preview nor the text editor should move.

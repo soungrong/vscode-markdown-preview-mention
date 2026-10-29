@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- In `claude` delivery mode, a mention no longer scrolls the preview and its source editor. The extension used to restore the editor's scroll position after Claude Code read the selection, and with sticky scroll on, that restore moved the editor up by up to five lines, and the preview followed.
+
 ## 0.1.0
 
 First public release.
