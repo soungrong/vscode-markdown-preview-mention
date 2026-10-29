@@ -3,8 +3,7 @@ const path = require('path');
 const MarkdownIt = require('markdown-it');
 const { chromium } = require('playwright');
 const { parseClipboardPayload, resolveRange } = require('../resolve-range');
-
-const EXPECTED_ROW = /^\d+\. (Select|Drag from|Triple-click) "([^"]+)"(?: to "([^"]+)")?.*: `#(\d+)(?:-(\d+))?`\.$/;
+const { expectedRows } = require('./fixture-rows.cjs');
 
 function createRenderer() {
   const markdown = MarkdownIt({ html: true, linkify: true });
@@ -23,15 +22,6 @@ function previewHtml(source) {
   const lineCount = source.split('\n').length;
   return `<html><head><meta id="vscode-markdown-preview-data" data-settings="${settings}"></head>
 <body><div class="markdown-body">${createRenderer().render(source)}<div class="code-line" data-line="${lineCount}"></div></div></body></html>`;
-}
-
-function expectedRows(source) {
-  return source.split('\n').map((line) => line.match(EXPECTED_ROW)).filter(Boolean).map((match) => ({
-    action: match[1],
-    from: match[2],
-    to: match[3] ?? match[2],
-    expected: match[5] ? `#${match[4]}-${match[5]}` : `#${match[4]}`,
-  }));
 }
 
 async function select(page, row) {
