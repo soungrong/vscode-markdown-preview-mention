@@ -2,7 +2,7 @@
   "name": "markdown-preview-mention",
   "displayName": "Markdown Preview Mention",
   "description": "Mention the lines you select in a Markdown preview in the Claude Code chat. Unofficial; not affiliated with Anthropic.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "soungrong",
   "license": "MIT",
   "icon": "images/icon.png",
